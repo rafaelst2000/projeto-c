@@ -39,6 +39,17 @@ void getData(Trip *trip){
     sum += trip->distancePerDay[i];
   }
   trip->distancePerDay[trip->numDays - 1] = trip->distance - sum;
+
+  printf("Vai chover? 1- Sim | 0 - Não");
+  scanf("%d", &trip->willRain);
+
+  printf("Digite a menor temperatura dentre os dias: ");
+  scanf("%lf", &trip->minTemp);
+
+  strcpy(trip->upperDress, getUpperClothes(trip->minTemp, trip->willRain));
+  strcpy(trip->lowerDress, getLowerClothes(trip->minTemp));
+  strcpy(trip->handDress, getHandClothes(trip->minTemp, trip->willRain));
+  strcpy(trip->footDress, getFootClothes(trip->minTemp, trip->willRain));
   
 }
 
@@ -48,6 +59,7 @@ double distancePerDayDynamically(int pos){
   scanf("%lf", &value); 
   return value;
 }
+
 
 
 
@@ -76,5 +88,75 @@ void testeProg(Trip *trip){
   for(i=0;i<trip->numDays; i++){
     printf("%.2f - ", trip->distancePerDay[i]);
   }
+  printf("\n------- Roupas --------\n");
+  printf("Superior: %s\n",trip->upperDress);
+  printf("Inferior: %s\n",trip->lowerDress);
+  printf("Luvas: %s\n",trip->handDress);
+  printf("Calçados: %s\n",trip->footDress);
   printf("\n");
+}
+
+
+/* Montando a roupa */
+
+char *getUpperClothes(double minTemp, int willRain){
+    if(willRain == true){
+      if(minTemp < 15){
+        return "Segunda pele de inverno + Jaqueta de Cordura c/forro + Capa de chuva";
+      }
+      else if(minTemp > 15 && minTemp < 23){
+        return "Segunda pele de inverno + Jaqueta de Cordura s/forro + Capa de chuva";
+      }else{
+        return "Segunda pele de verao + Jaqueta de Cordura s/forro + Capa de chuva";
+      }
+    }
+    else{
+      if(minTemp < 15){
+        return "Segunda pele de inverno + Jaqueta de Cordura c/forro";
+      }
+      else if(minTemp > 15 && minTemp < 23){
+        return "Segunda pele de inverno + Jaqueta de Cordura s/forro";
+      }else{
+        return "Segunda pele de verao + Jaqueta de Cordura s/forro";
+      }
+    }
+}
+
+char *getLowerClothes(double minTemp){
+  if(minTemp < 15){
+    return "Segunda pele de inverno + Calça de Cordura c/forro";
+  }
+  else if(minTemp > 15 && minTemp < 23){
+    return "Calça de Cordura c/forro";
+  }else{
+    return "Calça de Cordura s/forro";
+  }  
+}
+
+char *getFootClothes(double minTemp, int willRain){
+  if(willRain == true){
+    return "Botas para chuva";
+  }else{
+    if(minTemp < 23){
+      return "Botas para Motociclista";
+    }else{
+      return "Coturno para Motociclista";
+    }
+  }
+}
+
+char *getHandClothes(double minTemp, int willRain){
+  if(willRain == true){
+    if(minTemp < 23){
+      return "Luvas para frio impermeáveis";
+    }else{
+      return "Luvas de verão impermeáveis";
+    }
+  }else{
+    if(minTemp < 23){
+      return "Luvas para frio";
+    }else{
+      return "Luvas de verão";
+    }
+  }
 }
