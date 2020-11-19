@@ -7,13 +7,27 @@
 /* utils */
 
 void createTripReport(Trip trip){
-  FILE *arqS;
+  FILE *arq;
+  int i;
 
-  if ((arqS = fopen("trip.txt","a+")) == NULL) {
+  if ((arq = fopen("trip.txt","a+")) == NULL) {
     printf("Erro na criação do arquivo\n"); 
   }
-  fprintf(arqS,"------ Relatório do passeio------\nNome: %s\nMédia de Gasolina: %.2f\nDistância total: %.2f\n---------------------------------\n\n",trip.name, trip.gasolineAvg, trip.distance);
-  fclose (arqS);
+  fprintf(arq,"-------Dados da viagem-------\n");
+  fprintf(arq,"Nome: %s\n", trip.name);
+  fprintf(arq,"Distância: %.2lf\n", trip.distance);
+  fprintf(arq,"Número de dias: %d\n", trip.numDays);
+  fprintf(arq, "Kms de cada dia:\n");
+  for(i=0;i<trip.numDays;i++){
+     fprintf(arq, "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
+  }
+  fprintf(arq, "Vai chover? %s\n", getRain(trip.willRain));
+  fprintf(arq,"\n----- Vestuário ------\n");
+  fprintf(arq,"Superior: %s\n", trip.upperClothes);
+  fprintf(arq,"Inferior: %s\n", trip.lowerClothes);
+  fprintf(arq,"Mãos: %s\n", trip.handClothes);
+  fprintf(arq,"Pés: %s\n", trip.footClothes);
+  fclose (arq);
 }
 
 /* functions */
@@ -46,10 +60,10 @@ void getData(Trip *trip){
   printf("Digite a menor temperatura dentre os dias: ");
   scanf("%lf", &trip->minTemp);
 
-  strcpy(trip->upperDress, getUpperClothes(trip->minTemp, trip->willRain));
-  strcpy(trip->lowerDress, getLowerClothes(trip->minTemp));
-  strcpy(trip->handDress, getHandClothes(trip->minTemp, trip->willRain));
-  strcpy(trip->footDress, getFootClothes(trip->minTemp, trip->willRain));
+  strcpy(trip->upperClothes, getUpperClothes(trip->minTemp, trip->willRain));
+  strcpy(trip->lowerClothes, getLowerClothes(trip->minTemp));
+  strcpy(trip->handClothes, getHandClothes(trip->minTemp, trip->willRain));
+  strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain));
   
 }
 
@@ -89,13 +103,20 @@ void testeProg(Trip *trip){
     printf("%.2f - ", trip->distancePerDay[i]);
   }
   printf("\n------- Roupas --------\n");
-  printf("Superior: %s\n",trip->upperDress);
-  printf("Inferior: %s\n",trip->lowerDress);
-  printf("Luvas: %s\n",trip->handDress);
-  printf("Calçados: %s\n",trip->footDress);
+  printf("Superior: %s\n",trip->upperClothes);
+  printf("Inferior: %s\n",trip->lowerClothes);
+  printf("Luvas: %s\n",trip->handClothes);
+  printf("Calçados: %s\n",trip->footClothes);
   printf("\n");
 }
 
+char *getRain(int willRain){
+  if(willRain == true){
+    return "Sim";
+  }else{
+    return "Não";
+  }
+}
 
 /* Montando a roupa */
 

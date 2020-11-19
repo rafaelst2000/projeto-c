@@ -11,7 +11,7 @@ void main(){
   printMotorcycle();
   getData(&trip);
   testeProg(&trip);
-
+  createTripReport(trip);
 
 
 

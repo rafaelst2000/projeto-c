@@ -12,10 +12,11 @@ typedef struct
   int numDays;            //numero de dias de viagem
   double *distancePerDay; //distancia a ser percorrida por dia
   double minTemp;         //temperatura mais fria dentre os dias
-  char upperDress[255];
-  char lowerDress[255];
-  char footDress[255];
-  char handDress[255];
+
+  char upperClothes[255]; //roupas
+  char lowerClothes[255];
+  char footClothes[255];
+  char handClothes[255];
 
 } Trip;
 
@@ -30,5 +31,6 @@ char *getUpperClothes(double minTemp, int willRain);
 char *getLowerClothes(double minTemp);
 char *getFootClothes(double minTemp, int willRain);
 char *getHandClothes(double minTemp, int willRain);
+char *getRain(int willRain);
 
 void testeProg(Trip *trip);
