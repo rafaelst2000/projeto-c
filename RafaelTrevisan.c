@@ -43,16 +43,18 @@ void createTripReport(Trip trip){
 /* functions */
 
 void getData(Trip *trip, double gasoPrice){
+
   int i;
   double sum;
   printf("\n----------Monte sua viagem!---------\n\n");
   printf("Qual o destino?\n");
   printf("R: ");
-  scanf("%s", trip->name);
   fflush(stdin);
-  /* fgets(trip->name, 255, stdin); */
+  scanf("%s",trip->name);
+  fflush(stdin);
+/*   fgets(trip->name, 255, stdin); */
 
-   printf("Qual a distância total?\n");
+  printf("Qual a distância total?\n");
   printf("R: ");
   scanf("%lf", &trip->distance);
 
