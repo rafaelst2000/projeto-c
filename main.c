@@ -6,31 +6,12 @@
 
 
 void main(){
+  double gasoPrice;
   Trip trip;
   setlocale(LC_ALL, "Portuguese");
   printMotorcycle();
-  getData(&trip);
-  testeProg(&trip);
+  gasoPrice = getGasoPrice();
+  getData(&trip, gasoPrice);
+  testeProg(trip);
   createTripReport(trip);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*   strcpy(trip.name, "Viagem 1");
-  trip.distance = 300.50;
-  trip.gasolineAvg = 10.5; 
-  createTripReport(trip);*/
 }
