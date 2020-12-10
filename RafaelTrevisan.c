@@ -43,16 +43,13 @@ void createTripReport(Trip trip){
 /* functions */
 
 void getData(Trip *trip, double gasoPrice){
-
   int i;
   double sum;
   printf("\n----------Monte sua viagem!---------\n\n");
   printf("Qual o destino?\n");
   printf("R: ");
-  fflush(stdin);
-  scanf("%s",trip->name);
-  fflush(stdin);
-/*   fgets(trip->name, 255, stdin); */
+  while ((getchar()) != '\n'); //gambiarra da net pro fgets nao bugar após o scanf
+  fgets(trip->name, 255, stdin); 
 
   printf("Qual a distância total?\n");
   printf("R: ");
@@ -63,14 +60,12 @@ void getData(Trip *trip, double gasoPrice){
   scanf("%d", &trip->numDays);
 
   trip->distancePerDay = (double *) malloc(trip->numDays * sizeof(double));
-
-  printf("Qual a distância entre cada dia?\n");
-  for(i=0; i<trip->numDays-1; i++){
-    trip->distancePerDay[i] = distancePerDayDynamically(i);
-    sum += trip->distancePerDay[i];
+  getDate(trip);
+  if(trip->numDays > 1){
+    printf("Qual a distância entre cada dia?\n");
   }
-  trip->distancePerDay[trip->numDays - 1] = trip->distance - sum;
 
+  recursiveDistancePerDayDynamically(0, trip->numDays, trip);
   averageGasoline(trip, gasoPrice);
 
   printf("Vai chover? 1- Sim | 0 - Não\n");
@@ -87,11 +82,20 @@ void getData(Trip *trip, double gasoPrice){
   strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain)); 
 }
 
-double distancePerDayDynamically(int pos){
+/* double distancePerDayDynamically(int pos){
   double value;
   printf("Dia %d: ",pos+1);
   scanf("%lf", &value); 
   return value;
+} */
+
+void recursiveDistancePerDayDynamically(int pos, int tamanho, Trip *trip){
+  if(pos != tamanho){
+    printf("Dia %d: ", pos+1);
+    scanf("%lf", &trip->distancePerDay[pos]);
+    pos++;
+    recursiveDistancePerDayDynamically(pos, tamanho, trip);
+  }
 }
 
 void averageGasoline(Trip *trip, double gasoPrice){
@@ -101,7 +105,45 @@ void averageGasoline(Trip *trip, double gasoPrice){
   scanf("%lf",&cons);
   trip->totalMoney = trip->distance/cons*gasoPrice;
   trip->gasolineAvg = cons;
-  
+}
+
+char *getDate(Trip *trip){
+  int d,m,a,dC,mC,aC;
+  char date[15];
+  printf("------- Data -------\n");
+  printf("---- DD/MM/AAAA ----\n");
+  printf("Dia: ");
+  scanf("%d", &d);
+    while(d<0 && d>31){
+      printf("Digite novamente o dia: ");
+      scanf("%d", &d);
+    }
+  printf("Mes: ");
+  scanf("%d", &m);
+    while(d<0 && d>12){
+      printf("Digite novamente o mes: ");
+      scanf("%d", &m);
+    }
+  printf("Ano: ");
+  scanf("%d", &a);
+    while(a<2020){
+      printf("Digite novamente o ano: ");
+      scanf("%d", &a);
+    }
+  printf("\n----- Data de chegada -----\n"); 
+  dC = d + trip->numDays;
+  mC = m;
+  aC = a;
+  while(dC > 31){  
+    dC = dC - 31;
+    mC++;
+  }
+  while(mC > 12){  
+    dC = dC - 12;
+    aC++;
+  }
+  sprintf(date, "%d/%d/%d", dC,mC,aC);
+  printf("Data: %s\n", date);
 }
 
 /* miscellaneous */

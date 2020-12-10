@@ -17,6 +17,8 @@ typedef struct{
   char footClothes[255];
   char handClothes[255];
 
+  char dataSaida[255];
+
 } Trip;
 
 #define true 1
@@ -32,6 +34,8 @@ char *getHandClothes(double minTemp, int willRain);
 char *getRain(int willRain);
 void averageGasoline(Trip *trip, double gasoPrice);
 double getGasoPrice();
+void recursiveDistancePerDayDynamically(int pos, int tamanho, Trip *trip);
+char *getDate(Trip *trip);
 
 void printMotorcycle();
 void testeProg(Trip trip);
