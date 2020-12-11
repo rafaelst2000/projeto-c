@@ -107,7 +107,7 @@ void averageGasoline(Trip *trip, double gasoPrice){
   trip->gasolineAvg = cons;
 }
 
-char *getDate(Trip *trip){
+void getDate(Trip *trip){
   int d,m,a,dC,mC,aC;
   char date[15];
   printf("------- Data -------\n");
@@ -130,6 +130,9 @@ char *getDate(Trip *trip){
       printf("Digite novamente o ano: ");
       scanf("%d", &a);
     }
+  sprintf(date, "%d/%d/%d", d,m,a);
+  strcpy(trip->leavingDate, date);
+  strcpy(date, "");
   printf("\n----- Data de chegada -----\n"); 
   dC = d + trip->numDays;
   mC = m;
@@ -139,11 +142,11 @@ char *getDate(Trip *trip){
     mC++;
   }
   while(mC > 12){  
-    dC = dC - 12;
+    mC = mC - 12;
     aC++;
   }
   sprintf(date, "%d/%d/%d", dC,mC,aC);
-  printf("Data: %s\n", date);
+  strcpy(trip->arrivingDate, date);
 }
 
 /* miscellaneous */
