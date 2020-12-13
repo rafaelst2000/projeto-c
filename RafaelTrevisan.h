@@ -3,9 +3,9 @@ typedef struct{
   double distance;        //distancia total da viagem (em KM)
   double gasolineAvg;     //consumo da moto
   double hydration;       //quantidade de agua (em litros)
+  char food[255];
   int restAvg;            //numero de paradas que deverão ser feitas
   double restDistance;    //kilometragem de cada parada
-  int numPeople;          //numero de pessoas que vao na viagem
   int willRain;           //boolean para saber se deve levar roupa de chuva
   int numDays;            //numero de dias de viagem
   double *distancePerDay; //distancia a ser percorrida por dia
@@ -37,6 +37,7 @@ void averageGasoline(Trip *trip, double gasoPrice);
 double getGasoPrice();
 void recursiveDistancePerDayDynamically(int pos, int tamanho, Trip *trip);
 void getDate(Trip *trip);
+char *getFood(Trip *trip);
 
 void printMotorcycle();
 void testeProg(Trip trip);

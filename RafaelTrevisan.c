@@ -27,7 +27,7 @@ void createTripReport(Trip trip){
   fprintf(arq,"Número de dias: %d\n", trip.numDays);
   fprintf(arq, "Kms de cada dia:\n");
   for(i=0;i<trip.numDays;i++){
-     fprintf(arq, "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
+    fprintf(arq, "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
   }
   fprintf(arq, "Vai chover? %s\n", getRain(trip.willRain));
   fprintf(arq, "Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
@@ -67,6 +67,8 @@ void getData(Trip *trip, double gasoPrice){
 
   recursiveDistancePerDayDynamically(0, trip->numDays, trip);
   averageGasoline(trip, gasoPrice);
+
+  strcpy(trip->food, getFood(trip));
 
   printf("Vai chover? 1- Sim | 0 - Não\n");
   printf("R: ");
@@ -133,7 +135,6 @@ void getDate(Trip *trip){
   sprintf(date, "%d/%d/%d", d,m,a);
   strcpy(trip->leavingDate, date);
   strcpy(date, "");
-  printf("\n----- Data de chegada -----\n"); 
   dC = d + trip->numDays;
   mC = m;
   aC = a;
@@ -148,6 +149,29 @@ void getDate(Trip *trip){
   sprintf(date, "%d/%d/%d", dC,mC,aC);
   strcpy(trip->arrivingDate, date);
 }
+
+char *getFood(Trip *trip){
+  int i;
+  printf("\n*Lembre-se de levar o mínimo o possível para economizar espaço, \n");
+  printf("além de fazer paradas regularmente para se hidratar e alongar.\n");
+  printf("É recomendável comer algo a cada 2 ou 3 horas.");
+  printf("Se você fizer refeições em restaurantes, opte por alimentos leves como legumes e carne de frango,\n");
+  printf("Já que estes podem evitar o sono por necessitarem de menos energia na digestão\n");
+  if(trip->distance < 150){
+    return "Não é necessário levar comida";
+  }else if(trip->distance >= 150 && trip->distance <250){
+    for(i=0;i<trip->numDays;i++){
+      trip->totalMoney += 1;
+    }
+    return "Barras de Cereal ou Frutas Secas";
+  }else{
+    for(i=0;i<trip->numDays;i++){
+      trip->totalMoney += 61;
+    }
+    return "Barras de Cereal ou Frutas Secas + Refeições em restaurantes";
+  }
+}
+
 
 /* miscellaneous */
 void printMotorcycle(){
@@ -191,7 +215,7 @@ char *getRain(int willRain){
   }
 }
 
-/* Montando a roupa */
+/* Vestuário */
 
 char *getUpperClothes(double minTemp, int willRain){
     if(willRain == true){
