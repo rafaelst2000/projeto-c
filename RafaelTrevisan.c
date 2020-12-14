@@ -122,7 +122,7 @@ void getDate(Trip *trip){
     }
   printf("Mes: ");
   scanf("%d", &m);
-    while(d<0 && d>12){
+    while(m<0 && m>12){
       printf("Digite novamente o mes: ");
       scanf("%d", &m);
     }
@@ -152,11 +152,11 @@ void getDate(Trip *trip){
 
 char *getFood(Trip *trip){
   int i;
-  printf("\n*Lembre-se de levar o mínimo o possível para economizar espaço, \n");
+  printf("\n\n*Lembre-se de levar o mínimo o possível para economizar espaço, \n");
   printf("além de fazer paradas regularmente para se hidratar e alongar.\n");
   printf("É recomendável comer algo a cada 2 ou 3 horas.");
-  printf("Se você fizer refeições em restaurantes, opte por alimentos leves como legumes e carne de frango,\n");
-  printf("Já que estes podem evitar o sono por necessitarem de menos energia na digestão\n");
+  printf("Se você fizer refeições em restaurantes,\n opte por alimentos leves como legumes e carne de frango,\n");
+  printf("Já que estes podem evitar o sono por necessitarem de menos energia na digestão*\n\n");
   if(trip->distance < 150){
     return "Não é necessário levar comida";
   }else if(trip->distance >= 150 && trip->distance <250){
@@ -197,6 +197,9 @@ void testeProg(Trip trip){
   for(i=0;i<trip.numDays;i++){
      printf( "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
   }
+  printf("Data de saída: %s\n", trip.leavingDate);
+  printf("Data de chegada: %s\n", trip.arrivingDate);
+  printf("Alimentação: %s\n", trip.food);
   printf( "Vai chover? %s\n", getRain(trip.willRain));
   printf( "Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
   printf( "Total de gastos: R$%.2lf\n", trip.totalMoney);

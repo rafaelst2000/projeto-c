@@ -35,6 +35,7 @@ char *getHandClothes(double minTemp, int willRain);
 char *getRain(int willRain);
 void averageGasoline(Trip *trip, double gasoPrice);
 double getGasoPrice();
+
 void recursiveDistancePerDayDynamically(int pos, int tamanho, Trip *trip);
 void getDate(Trip *trip);
 char *getFood(Trip *trip);
