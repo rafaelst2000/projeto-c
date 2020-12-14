@@ -146,6 +146,15 @@ void getDate(Trip *trip){
     mC = mC - 12;
     aC++;
   }
+  dC--;
+  if(dC == 0){
+    dC = 31;
+    mC--;
+    if(mC == 0){
+      mC = 12;
+      aC--;
+    }
+  }
   sprintf(date, "%d/%d/%d", dC,mC,aC);
   strcpy(trip->arrivingDate, date);
 }
