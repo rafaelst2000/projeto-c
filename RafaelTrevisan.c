@@ -8,6 +8,7 @@
 
 double getGasoPrice(){
   double gas;
+  printf("----------Monte sua viagem!---------\n\n");
   printf("Qual o preço da gasolina no momento?\n");
   printf("R: ");
   scanf("%lf", &gas);
@@ -45,24 +46,23 @@ void createTripReport(Trip trip){
 void getData(Trip *trip, double gasoPrice){
   int i;
   double sum;
-  printf("\n----------Monte sua viagem!---------\n\n");
-  printf("Qual o destino?\n");
+  printf("\nQual o destino?\n");
   printf("R: ");
   while ((getchar()) != '\n'); //gambiarra da net pro fgets nao bugar após o scanf
   fgets(trip->name, 255, stdin); 
 
-  printf("Qual a distância total?\n");
+  printf("\nQual a distância total?\n");
   printf("R: ");
   scanf("%lf", &trip->distance);
 
-  printf("Qual a quantidade de dias?\n");
+  printf("\nQual a quantidade de dias?\n");
   printf("R: ");
   scanf("%d", &trip->numDays);
 
   trip->distancePerDay = (double *) malloc(trip->numDays * sizeof(double));
   getDate(trip);
   if(trip->numDays > 1){
-    printf("Qual a distância entre cada dia?\n");
+    printf("\nQual a distância entre cada dia?\n");
   }
 
   recursiveDistancePerDayDynamically(0, trip->numDays, trip);
@@ -70,18 +70,26 @@ void getData(Trip *trip, double gasoPrice){
 
   strcpy(trip->food, getFood(trip));
 
-  printf("Vai chover? 1- Sim | 0 - Não\n");
+  printf("\nVai chover? \n1- Sim \n0 - Não\n");
   printf("R: ");
   scanf("%d", &trip->willRain);
 
-  printf("Digite a menor temperatura dentre os dias.\n");
+  printf("\nDigite a menor temperatura dentre os dias.\n");
   printf("R: ");
   scanf("%lf", &trip->minTemp);
 
-  strcpy(trip->upperClothes, getUpperClothes(trip->minTemp, trip->willRain));
-  strcpy(trip->lowerClothes, getLowerClothes(trip->minTemp));
+  printf("\nVocê tem roupa adequada para motociclismo?\n");
+  printf("1 - Sim\n");
+  printf("0 - Não\n");
+  printf("R: ");
+  scanf("%d", &trip->userHasMotorcycleClothes);
+
+  strcpy(trip->upperClothes, getUpperClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
+  strcpy(trip->lowerClothes, getLowerClothes(trip->minTemp, trip->userHasMotorcycleClothes));
   strcpy(trip->handClothes, getHandClothes(trip->minTemp, trip->willRain));
-  strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain)); 
+  strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
+
+  getRestSum(trip); 
 }
 
 /* double distancePerDayDynamically(int pos){
@@ -102,7 +110,7 @@ void recursiveDistancePerDayDynamically(int pos, int tamanho, Trip *trip){
 
 void averageGasoline(Trip *trip, double gasoPrice){
   double cons;
-  printf("Qual o consumo da sua moto em Km/l ?\n");
+  printf("\nQual o consumo da sua moto em Km/l ?\n");
   printf("R: ");
   scanf("%lf",&cons);
   trip->totalMoney = trip->distance/cons*gasoPrice;
@@ -113,25 +121,24 @@ void getDate(Trip *trip){
   int d,m,a,dC,mC,aC;
   char date[15];
   printf("------- Data -------\n");
-  printf("---- DD/MM/AAAA ----\n");
   printf("Dia: ");
   scanf("%d", &d);
-    while(d<0 && d>31){
-      printf("Digite novamente o dia: ");
-      scanf("%d", &d);
-    }
+  while(d<0 && d>31){
+    printf("Digite novamente o dia: ");
+    scanf("%d", &d);
+  }
   printf("Mes: ");
   scanf("%d", &m);
-    while(m<0 && m>12){
-      printf("Digite novamente o mes: ");
-      scanf("%d", &m);
-    }
+  while(m<0 && m>12){
+    printf("Digite novamente o mes: ");
+    scanf("%d", &m);
+  }
   printf("Ano: ");
   scanf("%d", &a);
-    while(a<2020){
-      printf("Digite novamente o ano: ");
-      scanf("%d", &a);
-    }
+  while(a<2020){
+    printf("Digite novamente o ano: ");
+    scanf("%d", &a);
+  }
   sprintf(date, "%d/%d/%d", d,m,a);
   strcpy(trip->leavingDate, date);
   strcpy(date, "");
@@ -161,23 +168,32 @@ void getDate(Trip *trip){
 
 char *getFood(Trip *trip){
   int i;
-  printf("\n\n*Lembre-se de levar o mínimo o possível para economizar espaço, \n");
+  printf("\n*Lembre-se de levar o mínimo o possível para economizar espaço, \n");
   printf("além de fazer paradas regularmente para se hidratar e alongar.\n");
-  printf("É recomendável comer algo a cada 2 ou 3 horas.");
-  printf("Se você fizer refeições em restaurantes,\n opte por alimentos leves como legumes e carne de frango,\n");
-  printf("Já que estes podem evitar o sono por necessitarem de menos energia na digestão*\n\n");
+  printf("É recomendável comer algo a cada 2 ou 3 horas. ");
+  printf("Se você fizer refeições em restaurantes,\nopte por alimentos leves como legumes e carne de frango,\n");
+  printf("já que estes podem evitar o sono por necessitarem de menos energia na digestão*\n\n");
   if(trip->distance < 150){
     return "Não é necessário levar comida";
   }else if(trip->distance >= 150 && trip->distance <250){
     for(i=0;i<trip->numDays;i++){
-      trip->totalMoney += 1;
+      trip->totalMoney += 1.5; //cerca de uma ou duas barras ou frutas por dia
     }
     return "Barras de Cereal ou Frutas Secas";
   }else{
     for(i=0;i<trip->numDays;i++){
-      trip->totalMoney += 61;
+      trip->totalMoney += 51.5; //duas refeições de R$25 + 2 frutas ou barras;
     }
     return "Barras de Cereal ou Frutas Secas + Refeições em restaurantes";
+  }
+}
+
+void getRestSum(Trip *trip){
+  trip->restSum = 0;
+  int i;
+  double tes;
+  for(i=0;i<trip->numDays;i++){
+    trip->restSum += (int) trip->distancePerDay[i] % 90; //uma parada a cada cerca de 90km
   }
 }
 
@@ -206,17 +222,22 @@ void testeProg(Trip trip){
   for(i=0;i<trip.numDays;i++){
      printf( "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
   }
-  printf("Data de saída: %s\n", trip.leavingDate);
-  printf("Data de chegada: %s\n", trip.arrivingDate);
   printf("Alimentação: %s\n", trip.food);
   printf( "Vai chover? %s\n", getRain(trip.willRain));
   printf( "Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
-  printf( "Total de gastos: R$%.2lf\n", trip.totalMoney);
+
   printf("\n----- Vestuário ------\n");
   printf("Superior: %s\n", trip.upperClothes);
   printf("Inferior: %s\n", trip.lowerClothes);
   printf("Mãos: %s\n", trip.handClothes);
   printf("Pés: %s\n", trip.footClothes);
+  printf("Consumo da moto: %.2lf Km/L\n", trip.gasolineAvg);
+  printf("Alimentação: %s\n", trip.food);
+  printf("Número de paradas: %d\n", trip.restSum);
+  printf("Temperatura mais fria: %.1lfºC\n", trip.minTemp);
+  printf("Saída: %s\n", trip.leavingDate);
+  printf("Chegada: %s\n", trip.arrivingDate);
+  printf( "Total de gastos: R$%.2lf\n", trip.totalMoney);
 }
 
 char *getRain(int willRain){
@@ -229,7 +250,8 @@ char *getRain(int willRain){
 
 /* Vestuário */
 
-char *getUpperClothes(double minTemp, int willRain){
+char *getUpperClothes(double minTemp, int willRain, int userHasMotorcycleClothes){
+  if(userHasMotorcycleClothes == true){
     if(willRain == true){
       if(minTemp < 15){
         return "Segunda pele de inverno + Jaqueta de Cordura c/forro + Capa de chuva";
@@ -250,27 +272,68 @@ char *getUpperClothes(double minTemp, int willRain){
         return "Segunda pele de verao + Jaqueta de Cordura s/forro";
       }
     }
-}
-
-char *getLowerClothes(double minTemp){
-  if(minTemp < 15){
-    return "Segunda pele de inverno + Calça de Cordura c/forro";
+  }else{
+    if(willRain == true){
+      if(minTemp < 15){
+        return "Camiseta manga longa + blusão de lã + Jaqueta de Couro + Capa de chuva";
+      }
+      else if(minTemp > 15 && minTemp < 23){
+        return "Camiseta manga longa + Jaqueta de Couro + Capa de chuva";
+      }else{
+        return "Camiseta manga curta + Jaqueta de Couro + Capa de chuva";
+      }
+    }
+    else{
+      if(minTemp < 15){
+        return "Camiseta manga longa + blusão de lã + Jaqueta de Couro + Capa de chuva";
+      }
+      else if(minTemp > 15 && minTemp < 23){
+        return "Camiseta manga longa + Jaqueta de Couro";
+      }else{
+        return "Camiseta manga curta + Jaqueta de Couro + Capa de chuva";
+      }
+    }
   }
-  else if(minTemp > 15 && minTemp < 23){
-    return "Calça de Cordura c/forro";
-  }else{
-    return "Calça de Cordura s/forro";
-  }  
+    
 }
 
-char *getFootClothes(double minTemp, int willRain){
-  if(willRain == true){
-    return "Botas para chuva";
-  }else{
-    if(minTemp < 23){
-      return "Botas para Motociclista";
+char *getLowerClothes(double minTemp, int userHasMotorcycleClothes){
+  if(userHasMotorcycleClothes == true){
+    if(minTemp < 15){
+      return "Segunda pele de inverno + Calça de Cordura c/forro";
+    }
+    else if(minTemp > 15 && minTemp < 23){
+      return "Calça de Cordura c/forro";
     }else{
-      return "Coturno para Motociclista";
+      return "Calça de Cordura s/forro";
+    }  
+  }else{
+    if(minTemp < 15){
+      return "Pijama + Calça Jeans";
+    }else{
+      return "Calça Jeans";
+    } 
+  }
+}
+
+char *getFootClothes(double minTemp, int willRain, int userHasMotorcycleClothes){
+  if(userHasMotorcycleClothes == true){
+    if(willRain == true){
+      return "Botas para chuva";
+    }else{
+      if(minTemp < 23){
+        return "Botas para Motociclista";
+      }else{
+        return "Coturno para Motociclista";
+      }
+    }
+  }else{
+    if(willRain == true){
+      return "Botas para chuva";
+    }else{
+      if(minTemp < 23){
+        return "Calçado fechado";
+      }
     }
   }
 }
