@@ -12,6 +12,10 @@ double getGasoPrice(){
   printf("Qual o preço da gasolina no momento?\n");
   printf("R: ");
   scanf("%lf", &gas);
+  while(gas <= 0 ){
+    printf("Digite novamente o preço.\nR: R$");
+    scanf("%lf",&gas);
+  }
   return gas;
 }
 
@@ -25,19 +29,25 @@ void createTripReport(Trip trip){
   fprintf(arq,"-------Dados da viagem-------\n");
   fprintf(arq,"Nome: %s\n", trip.name);
   fprintf(arq,"Distância: %.2lf\n", trip.distance);
+  fprintf(arq,"Número de paradas: %d\n", trip.restSum);
   fprintf(arq,"Número de dias: %d\n", trip.numDays);
   fprintf(arq, "Kms de cada dia:\n");
   for(i=0;i<trip.numDays;i++){
     fprintf(arq, "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
   }
+  fprintf(arq,"Saída: %s\n", trip.leavingDate);
+  fprintf(arq,"Chegada: %s\n", trip.arrivingDate);
+  fprintf(arq,"Temperatura mais fria: %.1lfºC\n", trip.minTemp);
   fprintf(arq, "Vai chover? %s\n", getRain(trip.willRain));
   fprintf(arq, "Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
+  fprintf(arq,"Alimentação: %s\n", trip.food);
   fprintf(arq, "Total de gastos: R$%.2lf\n", trip.totalMoney);
   fprintf(arq,"\n----- Vestuário ------\n");
   fprintf(arq,"Superior: %s\n", trip.upperClothes);
   fprintf(arq,"Inferior: %s\n", trip.lowerClothes);
   fprintf(arq,"Mãos: %s\n", trip.handClothes);
   fprintf(arq,"Pés: %s\n", trip.footClothes);
+  fprintf(arq,"----------------------------\n");
   fclose (arq);
 }
 
@@ -54,18 +64,29 @@ void getData(Trip *trip, double gasoPrice){
   printf("\nQual a distância total?\n");
   printf("R: ");
   scanf("%lf", &trip->distance);
+  while(trip->distance <= 0 ){
+    printf("Digite novamente a distância total: ");
+    scanf("%lf",&trip->distance);
+  }
 
   printf("\nQual a quantidade de dias?\n");
   printf("R: ");
   scanf("%d", &trip->numDays);
-
+  while(trip->numDays <= 0 ){
+    printf("Digite novamente a quantidade de dias: ");
+    scanf("%d",&trip->numDays);
+  }
+  
   trip->distancePerDay = (double *) malloc(trip->numDays * sizeof(double));
+
   getDate(trip);
+
   if(trip->numDays > 1){
     printf("\nQual a distância entre cada dia?\n");
+    recursiveDistancePerDayDynamically(0, trip->numDays, trip);
+  }else{
+    trip->distancePerDay[0] = trip->distance;
   }
-
-  recursiveDistancePerDayDynamically(0, trip->numDays, trip);
   averageGasoline(trip, gasoPrice);
 
   strcpy(trip->food, getFood(trip));
@@ -73,6 +94,12 @@ void getData(Trip *trip, double gasoPrice){
   printf("\nVai chover? \n1- Sim \n0 - Não\n");
   printf("R: ");
   scanf("%d", &trip->willRain);
+  while(trip->willRain != 1 && trip->willRain != 0){
+    printf("%d\n\n",trip->willRain);
+    printf("Digite novamente.\n");
+    printf("R: ");
+    scanf("%d", &trip->willRain);
+  }
 
   printf("\nDigite a menor temperatura dentre os dias.\n");
   printf("R: ");
@@ -83,13 +110,18 @@ void getData(Trip *trip, double gasoPrice){
   printf("0 - Não\n");
   printf("R: ");
   scanf("%d", &trip->userHasMotorcycleClothes);
+  while(trip->userHasMotorcycleClothes != 1 && trip->userHasMotorcycleClothes != 0){
+    printf("Digite novamente.\n");
+    printf("R: ");
+    scanf("%d", &trip->willRain);
+  }
 
   strcpy(trip->upperClothes, getUpperClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
   strcpy(trip->lowerClothes, getLowerClothes(trip->minTemp, trip->userHasMotorcycleClothes));
   strcpy(trip->handClothes, getHandClothes(trip->minTemp, trip->willRain));
   strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
 
-  getRestSum(trip); 
+  getRestSum(trip);
 }
 
 /* double distancePerDayDynamically(int pos){
@@ -113,6 +145,10 @@ void averageGasoline(Trip *trip, double gasoPrice){
   printf("\nQual o consumo da sua moto em Km/l ?\n");
   printf("R: ");
   scanf("%lf",&cons);
+  while(cons <= 0){
+    printf("Digite novamente o consumo da moto: ");
+    scanf("%lf", &cons);
+  }
   trip->totalMoney = trip->distance/cons*gasoPrice;
   trip->gasolineAvg = cons;
 }
@@ -123,13 +159,13 @@ void getDate(Trip *trip){
   printf("------- Data -------\n");
   printf("Dia: ");
   scanf("%d", &d);
-  while(d<0 && d>31){
+  while(d<0 || d>31){
     printf("Digite novamente o dia: ");
     scanf("%d", &d);
   }
   printf("Mes: ");
   scanf("%d", &m);
-  while(m<0 && m>12){
+  while(m<0 || m>12){
     printf("Digite novamente o mes: ");
     scanf("%d", &m);
   }
@@ -217,27 +253,25 @@ void testeProg(Trip trip){
   printf("-------Dados da viagem-------\n");
   printf("Nome: %s\n", trip.name);
   printf("Distância: %.2lf\n", trip.distance);
+  printf("Número de paradas: %d\n", trip.restSum);
   printf("Número de dias: %d\n", trip.numDays);
   printf( "Kms de cada dia:\n");
   for(i=0;i<trip.numDays;i++){
      printf( "Dia %d: %.2lf Kms\n",i+1, trip.distancePerDay[i]);
   }
   printf("Alimentação: %s\n", trip.food);
-  printf( "Vai chover? %s\n", getRain(trip.willRain));
-  printf( "Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
-
+  printf("Vai chover? %s\n", getRain(trip.willRain));
+  printf("Consumo da moto: %.2lfKm/l\n", trip.gasolineAvg);
+  printf("Temperatura mais fria: %.1lfºC\n", trip.minTemp);
+  printf("Saída: %s\n", trip.leavingDate);
+  printf("Chegada: %s\n", trip.arrivingDate);
+  printf( "Total de gastos: R$%.2lf\n", trip.totalMoney);
   printf("\n----- Vestuário ------\n");
   printf("Superior: %s\n", trip.upperClothes);
   printf("Inferior: %s\n", trip.lowerClothes);
   printf("Mãos: %s\n", trip.handClothes);
   printf("Pés: %s\n", trip.footClothes);
-  printf("Consumo da moto: %.2lf Km/L\n", trip.gasolineAvg);
-  printf("Alimentação: %s\n", trip.food);
-  printf("Número de paradas: %d\n", trip.restSum);
-  printf("Temperatura mais fria: %.1lfºC\n", trip.minTemp);
-  printf("Saída: %s\n", trip.leavingDate);
-  printf("Chegada: %s\n", trip.arrivingDate);
-  printf( "Total de gastos: R$%.2lf\n", trip.totalMoney);
+  printf("----------------------------\n");
 }
 
 char *getRain(int willRain){
