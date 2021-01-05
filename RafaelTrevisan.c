@@ -91,7 +91,7 @@ void getData(Trip *trip, double gasoPrice){
 
   strcpy(trip->food, getFood(trip));
 
-  printf("\nVai chover? \n1- Sim \n0 - Não\n");
+  printf("\nVai chover? \n1 - Sim \n0 - Não\n");
   printf("R: ");
   scanf("%d", &trip->willRain);
   while(trip->willRain != 1 && trip->willRain != 0){
@@ -119,7 +119,7 @@ void getData(Trip *trip, double gasoPrice){
   strcpy(trip->upperClothes, getUpperClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
   strcpy(trip->lowerClothes, getLowerClothes(trip->minTemp, trip->userHasMotorcycleClothes));
   strcpy(trip->handClothes, getHandClothes(trip->minTemp, trip->willRain));
-  strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes));
+  strcpy(trip->footClothes, getFootClothes(trip->minTemp, trip->willRain, trip->userHasMotorcycleClothes)); 
 
   getRestSum(trip);
 }
@@ -229,6 +229,8 @@ void getRestSum(Trip *trip){
   int i;
   double tes;
   for(i=0;i<trip->numDays;i++){
+    printf("tes1 %1.lf\n", trip->distancePerDay[i]);
+    printf("tes2 %d\n", (int) trip->distancePerDay[i] % 90);
     trip->restSum += (int) trip->distancePerDay[i] % 90; //uma parada a cada cerca de 90km
   }
 }
@@ -365,9 +367,7 @@ char *getFootClothes(double minTemp, int willRain, int userHasMotorcycleClothes)
     if(willRain == true){
       return "Botas para chuva";
     }else{
-      if(minTemp < 23){
-        return "Calçado fechado";
-      }
+      return "Calçado fechado";
     }
   }
 }
