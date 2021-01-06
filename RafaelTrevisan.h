@@ -45,3 +45,5 @@ void printMotorcycle();
 void testeProg(Trip trip);
 
 void getRestSum(Trip *trip);
+int selectMenu();
+void readReport();

@@ -6,9 +6,26 @@
 
 /* utils */
 
+int selectMenu(){
+  int i;
+  printMotorcycle();
+  printf("Seja bem vindo! Em que posso ajudar?\n");
+  printf("1 - Nova Simulação\n");
+  printf("2 - Ver dados anteriores\n");
+  printf("0 - Sair\n");
+  printf("R: ");
+  scanf("%d", &i);
+  while(i < 0 || i > 2){
+    printf("Comando inválido, digite novamente!\n");
+    printf("R: ");
+    scanf("%d", &i);
+  }
+  return i;
+}
+
 double getGasoPrice(){
   double gas;
-  printf("----------Monte sua viagem!---------\n\n");
+  printf("\n----------Monte sua viagem!---------\n\n");
   printf("Qual o preço da gasolina no momento?\n");
   printf("R: ");
   scanf("%lf", &gas);
@@ -26,8 +43,8 @@ void createTripReport(Trip trip){
   if ((arq = fopen("trip.txt","a+")) == NULL) {
     printf("Erro na criação do arquivo\n"); 
   }
-  fprintf(arq,"-------Dados da viagem-------\n");
-  fprintf(arq,"Nome: %s\n", trip.name);
+  fprintf(arq,"-------Dados da viagem -------\n");
+  fprintf(arq,"Nome: %s", trip.name);
   fprintf(arq,"Distância: %.2lf\n", trip.distance);
   fprintf(arq,"Número de paradas: %d\n", trip.restSum);
   fprintf(arq,"Número de dias: %d\n", trip.numDays);
@@ -49,6 +66,19 @@ void createTripReport(Trip trip){
   fprintf(arq,"Pés: %s\n", trip.footClothes);
   fprintf(arq,"----------------------------\n");
   fclose (arq);
+}
+
+void readReport(){
+  FILE *arq;
+  char info[255];
+
+  if ((arq = fopen("trip.txt","r")) == NULL) {
+    printf("Erro na criação do arquivo\n"); 
+  }
+  while( (fgets(info, sizeof(info), arq))!=NULL ){
+   printf("%s", info);
+  }
+  fclose(arq);
 }
 
 /* functions */
@@ -257,7 +287,7 @@ void printMotorcycle(){
 void testeProg(Trip trip){
   int i;
   printf("-------Dados da viagem-------\n");
-  printf("Nome: %s\n", trip.name);
+  printf("Nome: %s", trip.name);
   printf("Distância: %.2lf\n", trip.distance);
   printf("Número de paradas: %d\n", trip.restSum);
   printf("Número de dias: %d\n", trip.numDays);
