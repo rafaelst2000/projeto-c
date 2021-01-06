@@ -1,9 +1,10 @@
-typedef struct{
+typedef struct
+{
   char name[255];     //nome do destino
   double distance;    //distancia total da viagem (em KM)
   double gasolineAvg; //consumo da moto
   char food[255];
-  double restSum;         //numero de paradas que deverão ser feitas
+  int restSum;            //numero de paradas que deverão ser feitas
   int willRain;           //boolean para saber se deve levar roupa de chuva
   int numDays;            //numero de dias de viagem
   double *distancePerDay; //distancia a ser percorrida por dia

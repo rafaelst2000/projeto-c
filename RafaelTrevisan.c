@@ -226,12 +226,16 @@ char *getFood(Trip *trip){
 
 void getRestSum(Trip *trip){
   trip->restSum = 0;
-  int i;
+  int i,aux;
   double tes;
-  for(i=0;i<trip->numDays;i++){
-    printf("tes1 %1.lf\n", trip->distancePerDay[i]);
-    printf("tes2 %d\n", (int) trip->distancePerDay[i] % 90);
-    trip->restSum += (int) trip->distancePerDay[i] % 90; //uma parada a cada cerca de 90km
+
+  if((int) trip->distance % 90 == 0){
+    trip->restSum = ((int) trip->distance/90) - 1; 
+  }else{
+    for(i=0;i<trip->numDays;i++){
+      aux = (int) trip->distance/90;
+      trip->restSum += aux; //uma parada a cada cerca de 90km
+    }
   }
 }
 
