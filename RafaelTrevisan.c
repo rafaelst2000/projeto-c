@@ -45,7 +45,7 @@ void createTripReport(Trip trip){
   }
   fprintf(arq,"-------Dados da viagem -------\n");
   fprintf(arq,"Nome: %s", trip.name);
-  fprintf(arq,"Distância: %.2lf\n", trip.distance);
+  fprintf(arq,"Distância: %.2lf\n Kms", trip.distance);
   fprintf(arq,"Número de paradas: %d\n", trip.restSum);
   fprintf(arq,"Número de dias: %d\n", trip.numDays);
   fprintf(arq, "Kms de cada dia:\n");
@@ -288,7 +288,7 @@ void testeProg(Trip trip){
   int i;
   printf("-------Dados da viagem-------\n");
   printf("Nome: %s", trip.name);
-  printf("Distância: %.2lf\n", trip.distance);
+  printf("Distância: %.2lf\n Kms", trip.distance);
   printf("Número de paradas: %d\n", trip.restSum);
   printf("Número de dias: %d\n", trip.numDays);
   printf( "Kms de cada dia:\n");
